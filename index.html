@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,
+     initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>RPG Game</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+    .fader {
+        opacity: 0.5;
+    }
+    </style>
+</head>
+<body>
+        <div class="container">
+            <h1>Adventure Time Fighters</h1>
+            <div class="row characters"></div>
+            <div class="row gameplay">
+                <div class="col-md-4 myHero"></div>
+                <div class="col-md-4 myGameLog">
+                    <br>
+                    <div class="row meleeAttack"></div>
+                    <br>
+                    <div class="row rangedAttack"></div>
+                    <br>
+                    <div class="row parryAttack"></div>
+                </div>
+                <div class="col-md-4 myEnemy"></div>
+            </div>
+        </div>
+    <script src="http://code.jquery.com/jquery-3.3.1.js"   
+    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60= "crossorigin="anonymous"></script> 
+    <script>
+        // array of character objs
+        var charArr = [
+        {            
+            id: 0,
+            name: "Finn",
+            hp: 60,
+            image: "assets/images/Finn.png"
+        },
+        {
+            id: 1,
+            name: "Jake",
+            hp: 60,
+            image: "assets/images/Jake.png"
+        },
+        {
+            id: 2,
+            name: "BMO",
+            hp: 60,
+            image: "assets/images/BMO1.png"
+        },
+        {
+            id: 3,
+            name: "Ice King",
+            hp: 60,
+            image: "assets/images/Ice_King.png"
+        },
+        {
+            id: 4,
+            name: "Lich King",
+            hp: 60,
+            image: "assets/images/The_Lich_King.png"
+        },
+        {
+            id: 5,
+            name: "Lemongrab",
+            hp: 60,
+            image: "assets/images/Lemongrab.png"
+        }
+    ]
+    //chosen hero obj
+    var chosenHero
+    //is chosen bool
+    var isHeroChosen
+    //is hero alive bool
+    var isHeroAlive
+    //chosen enemy obj
+    var chosenEnemy
+    //is enemy chosen bool
+    var isEnemyChosen
+    //is enemy alive bool
+    var isEnemyAlive
+    // enemy attack types array
+    var attackTypes = ['melee', 'ranged', 'parry'];
+    
+    // init game function
+    function initGame() {
+        isHeroChosen = false
+        isEnemyChosen = false
+        var num = Math.floor(12 / charArr.length)
+        for ( var i = 0 ; i < charArr.length ; i++) {
+            var charThing = $("<div id='character-"+i+"'class='char col-md-"+num+"'value='"+i+"'></div>")
+            charThing.html(
+                "<img src='"+charArr[i].image+"'style='width:100px;height:100px;'/><h3>"+charArr[i].name+"</h3"
+            )
+            $(".characters").append(charThing)
+        }
+    }
+    $(document).on("click", ".char", function() {
+        if(!isHeroChosen) {
+        chosenHero = charArr[$(this).attr("value")]
+        console.log(chosenHero)
+        isHeroChosen = true
+        $(this).addClass("fader")
+        $(".myHero").html(
+            "<div id='character-"+chosenHero.id+"'><h1>YOUR HERO: </h1><img src='"
+            +chosenHero.image+"'style='width:170px;height:170px;'/><h2>"+chosenHero.name+"</h2><h3 class='myHeroHP'>"+chosenHero.hp+"</h3></div>"
+        )
+        }
+        else if (!isEnemyChosen) {
+        chosenEnemy= charArr[$(this).attr("value")]
+        console.log(chosenEnemy)
+        isEnemyChosen = true 
+        $(this).addClass("fader")
+        $(".myEnemy").html(
+            "<div id='character-"+chosenEnemy.id+"'><h1>YOUR ENEMY: </h1><img src='"
+            +chosenEnemy.image+"'style='width:170px;height:170px;'/><h2>"+chosenEnemy.name+"</h2><h3 class='myEnemyHP'>"+chosenEnemy.hp+"</h3></div>"
+        )
+        $(".meleeAttack").html(
+            "<br><button class='startBTN btn btn-primary btn-lg'>READY?</button>"
+        )
+        }
+    }) 
+    $(document).on("click" ,".startBTN" , function () {
+       gamePlayThing= $("<div class='row'><button class='meleeBTN'>MELEE ATTACK!</button></div><div class='row logger'></div>", )
+       $(".meleeAttack").html(gamePlayThing)
+       alert("Tip: \nmelee attacks > ranged attacks \nranged attacks > parry attacks  \nparry attacks > melee attacks \n\nTo do more damage, your attack type must beat your opponents. \nFirst to zero health loses.")
+       
+    })
+    $(document).on("click" ,".startBTN" , function () {
+       gamePlayThing2= $("<div class='row'><button class='rangedBTN'>RANGED ATTACK!</button></div><div class='row logger'></div>", )
+       $(".rangedAttack").html(gamePlayThing2)
+       
+    })
+    $(document).on("click" ,".startBTN" , function () {
+       gamePlayThing3= $("<div class='row'><button class='parryBTN'>PARRY ATTACK!</button></div><div class='row logger'></div>", )
+       $(".parryAttack").html(gamePlayThing3)
+       
+    })
+
+    // hero attack function
+    $(document).on("click", ".meleeBTN", function (){    
+        var enemyAttack = attackTypes[Math.floor(Math.random() * attackTypes.length)];
+        $(".enemyAttack")
+        console.log(enemyAttack)
+        
+        if (enemyAttack === "melee") {
+            chosenHero.hp -= 2
+            chosenEnemy.hp -= 2
+            }
+            else if (enemyAttack === "ranged") {
+            chosenHero.hp -= 4
+            chosenEnemy.hp -= 12
+            }
+            else  {
+            chosenHero.hp -= 12
+            chosenEnemy.hp -= 4
+            }
+
+        $(".myHeroHP").text(chosenHero.hp)
+        $(".myEnemyHP").text(chosenEnemy.hp)
+        console.log(chosenHero.hp)
+        console.log(chosenEnemy.hp)
+
+        if (chosenHero.hp < 1){
+        alert("You Lost")
+        console.log("You Lost")
+        resetGame();
+        }
+        if (chosenEnemy.hp < 1){
+        alert("You Won")
+        console.log("You Won")
+        resetGame();
+        }
+    })
+
+    $(document).on("click", ".rangedBTN", function (){
+        var enemyAttack = attackTypes[Math.floor(Math.random() * attackTypes.length)];
+        $(".enemyAttack")
+        console.log(enemyAttack)
+
+        if (enemyAttack === "ranged") {
+            chosenHero.hp -= 2
+            chosenEnemy.hp -= 2
+            }
+            else if (enemyAttack === "parry") {
+            chosenHero.hp -= 4
+            chosenEnemy.hp -= 12
+            }
+            else  {
+            chosenHero.hp -= 12
+            chosenEnemy.hp -= 4
+            }
+        
+        $(".myHeroHP").text(chosenHero.hp)
+        $(".myEnemyHP").text(chosenEnemy.hp)
+        console.log(chosenHero.hp)
+        console.log(chosenEnemy.hp)
+
+        if (chosenHero.hp < 1){
+        alert("You Lost")
+        console.log("You Lost")
+        resetGame();
+        }
+        if (chosenEnemy.hp < 1){
+        alert("You Won")
+        console.log("You Won")
+        resetGame();
+        }
+    })
+
+    $(document).on("click", ".parryBTN", function (){
+        var enemyAttack = attackTypes[Math.floor(Math.random() * attackTypes.length)];
+        $(".enemyAttack")
+        console.log(enemyAttack)
+
+        if (enemyAttack === "parry") {
+            chosenHero.hp -= 2
+            chosenEnemy.hp -= 2
+            }
+            else if (enemyAttack === "melee") {
+            chosenHero.hp -= 4
+            chosenEnemy.hp -= 12
+            }
+            else  {
+            chosenHero.hp -= 12
+            chosenEnemy.hp -= 4
+            }
+
+        $(".myHeroHP").text(chosenHero.hp)
+        $(".myEnemyHP").text(chosenEnemy.hp)
+        console.log(chosenHero.hp)
+        console.log(chosenEnemy.hp)
+        
+        if (chosenHero.hp < 1){
+        alert("You Lost")
+        console.log("You Lost")
+        resetGame();
+        }
+        if (chosenEnemy.hp < 1){
+        alert("You Won")    
+        console.log("You Won")
+        resetGame();
+        }
+    })
+
+    // reset game function
+    function resetGame() {
+        isHeroChosen = false
+        isEnemyChosen = false
+        var num = Math.floor(12 / charArr.length)
+        $(".meleeBTN").remove();
+        $(".rangedBTN").remove();
+        $(".parryBTN").remove();
+        chosenHero.hp = 60
+        chosenEnemy.hp = 60
+        alert("Pick new charcters!")
+        $(".char").removeClass("fader")
+    }
+
+    initGame()
+    </script>
+</body>
+
+</html>
